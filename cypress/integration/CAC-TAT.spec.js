@@ -17,7 +17,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('#lastName').type('Guedes')
         cy.get('#email').type('lucas@teste.com.br')
         cy.get('#open-text-area').type(longText, {delay: 0})
-        cy.get('.button[type="submit"]').click()
+        cy.contains('.button', 'Enviar').click()
         
         cy.get('.success').should('be.visible')
     })
@@ -28,7 +28,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('#lastName').type('Guedes')
         cy.get('#email').type('lucas@teste,com.br')
         cy.get('#open-text-area').type('teste')
-        cy.get('.button[type="submit"]').click()
+        cy.contains('.button', 'Enviar').click()
 
         cy.get('.error').should('be.visible')
     })
@@ -46,7 +46,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('#lastName').type('Guedes')
         cy.get('#email').type('lucas@teste.com.br')
         cy.get('#open-text-area').type('teste')
-        cy.get('.button[type="submit"]').click()
+        cy.contains('.button', 'Enviar').click()
 
         cy.get('.error').should('be.visible')
     })
@@ -60,9 +60,36 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 
 // mensagem de erro ao tentar salvar sem enviar dados
     it('Mensagem de erro ao submeter form sem preencher campos obrigatórios', function(){
-        cy.get('.button[type="submit"]').click()
+        cy.contains('.button', 'Enviar').click()
 
         cy.get('.error').should('be.visible')
     })
+
+
+    //criando comando customizado (commands,js) após isso chamar o comando e executar
+    it('envia o formuário com sucesso usando um comando customizado', function(){
+        cy.fillMandatoryFieldsAndSubmit()
+        cy.get('.success').should('be.visible')
+    })
+    // utilizando select para selecionar uma opção dentro de uma combobox pelo texto e depois conferindo o value
+    it('seleciona um produto (YouTube) por seu texto', function(){
+        cy.get('#product') //passando ID do select
+            .select('YouTube')
+            .should('have.value', 'youtube')
+    })
+    //utilizando selct para selecionar uma opção da combobox, porém, agora com o value 
+    it('seleciona um produto (Mentoria) por seu valor (value)', function(){
+        cy.get('#product')
+            .select('mentoria')
+            .should('have.value', 'mentoria')
+    })
+    //utilizando selct para selecionar uma opção da combobox, porém, agora com o indice
+    it.only('seleciona um produto (Blog) por seu índice', function(){
+        cy.get('#product')
+            .select(1)
+            .should('have.value', 'blog')
+    })
 })
+
+
 
